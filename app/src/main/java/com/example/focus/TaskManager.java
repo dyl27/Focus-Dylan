@@ -9,7 +9,6 @@ import java.util.List;
  * Implementa operaciones CRUD sobre una colección de tareas.
  */
 public class TaskManager {
-
     // Lista que almacena las tareas
     private List<String> tasks;
 
