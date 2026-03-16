@@ -1,5 +1,7 @@
 package com.example.focus;
-
+/**
+ * @author Dylan Enrique Juárez Martínez
+ */
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
