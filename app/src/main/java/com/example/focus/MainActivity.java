@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+import android.os.Vibrator;
+import android.content.Context;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                notifySessionFinished();
                 changeMode();
             }
 
@@ -173,5 +177,15 @@ public class MainActivity extends AppCompatActivity {
         sessionDotsContainer.addView(dot);
 
     }
+
+    private void notifySessionFinished(){
+        Toast.makeText(this,"Sesión terminada",Toast.LENGTH_SHORT).show();
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if(vibrator != null){
+            vibrator.vibrate(500);
+        }
+
+    }
+
 
 }
