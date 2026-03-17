@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvTimerDisplay;
     private Button btnStartStop;
     private LinearLayout sessionDotsContainer;
-
+    private Button btnReset;
+    private Button btnSkip;
+    private TextView tvSessionCount;
     // Timer
     private CountDownTimer timer;
 
@@ -63,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
         tvTimerDisplay = findViewById(R.id.tvTimerDisplay);
         btnStartStop = findViewById(R.id.btnStartStop);
         sessionDotsContainer = findViewById(R.id.sessionDotsContainer);
-
+        btnReset = findViewById(R.id.btnReset);
+        btnSkip = findViewById(R.id.btnSkip);
+        tvSessionCount = findViewById(R.id.tvSessionCount);
         // Botón Start / Stop
         btnStartStop.setOnClickListener(v -> {
 
@@ -80,7 +84,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnReset.setOnClickListener(v -> {
+
+            if(timer != null){
+                timer.cancel();
+            }
+
+            isRunning = false;
+
+            if(currentMode.equals("FOCUS")){
+                currentTime = focusTime;
+            }
+            else if(currentMode.equals("BREAK")){
+                currentTime = breakTime;
+            }
+            else{
+                currentTime = restTime;
+            }
+
+            updateTimerDisplay();
+
+            btnStartStop.setText("Start");
+
+        });
+        btnSkip.setOnClickListener(v -> {
+
+            if(timer != null){
+                timer.cancel();
+            }
+
+            changeMode();
+
+        });
+
     }
+
+
 
     private void startTimer(){
 
@@ -118,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         if(currentMode.equals("FOCUS")){
 
             focusSessions++;
-
+            tvSessionCount.setText("Sesiones: " + focusSessions);
             addSessionDot();
 
             if(focusSessions == 4){
@@ -185,6 +224,13 @@ public class MainActivity extends AppCompatActivity {
             vibrator.vibrate(500);
         }
 
+    }
+
+    private void updateTimerDisplay(){
+        int minutes = (int) (currentTime / 1000) / 60;
+        int seconds = (int) (currentTime / 1000) % 60;
+        String time = String.format("%02d:%02d",minutes,seconds);
+        tvTimerDisplay.setText(time);
     }
 
 
