@@ -8,6 +8,8 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,14 +17,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-// Version modificada en main
-// Comentario para crear el conflicto
-
 public class MainActivity extends AppCompatActivity {
 
     // UI
     private TextView tvTimerDisplay;
     private Button btnStartStop;
+    private LinearLayout sessionDotsContainer;
 
     // Timer
     private CountDownTimer timer;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     // Estado
     private boolean isRunning = false;
 
-    // Tiempos (en milisegundos)
+    // Tiempos (milisegundos)
     private long focusTime = 25 * 60 * 1000;
     private long breakTime = 5 * 60 * 1000;
     private long restTime = 15 * 60 * 1000;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // Conectar UI
         tvTimerDisplay = findViewById(R.id.tvTimerDisplay);
         btnStartStop = findViewById(R.id.btnStartStop);
+        sessionDotsContainer = findViewById(R.id.sessionDotsContainer);
 
         // Botón Start / Stop
         btnStartStop.setOnClickListener(v -> {
@@ -79,11 +80,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTimer(){
-        // Evitar múltiples timers
+
         if(timer != null){
             timer.cancel();
         }
+
         timer = new CountDownTimer(currentTime,1000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -101,23 +104,36 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 changeMode();
             }
+
         }.start();
     }
 
 
     private void changeMode(){
+
         if(currentMode.equals("FOCUS")){
+
             focusSessions++;
+
+            addSessionDot();
+
             if(focusSessions == 4){
+
                 currentMode = "REST";
                 currentTime = restTime;
                 focusSessions = 0;
+
                 Log.d("Pomodoro","Descanso largo");
+
             }else{
+
                 currentMode = "BREAK";
                 currentTime = breakTime;
+
                 Log.d("Pomodoro","Descanso corto");
+
             }
+
         }
         else if(currentMode.equals("BREAK")){
 
@@ -137,6 +153,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         startTimer();
+
+    }
+
+
+    private void addSessionDot(){
+
+        ImageView dot = new ImageView(this);
+
+        dot.setImageResource(R.drawable.dot_session_completed);
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(40,40);
+
+        params.setMargins(8,8,8,8);
+
+        dot.setLayoutParams(params);
+
+        sessionDotsContainer.addView(dot);
 
     }
 
